@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`react-query-selector generatePath should provide path for anonymous elements 1`] = `"p"`;
+
+exports[`react-query-selector generatePath should provide path for named elements 1`] = `"<App> p"`;
+
+exports[`react-query-selector generatePath should provide path for nested elements 1`] = `"<Functional> p"`;
+
+exports[`react-query-selector generatePath should provide path for nested elements 2`] = `"<Functional> div:nth-of-type(2)"`;
+
+exports[`react-query-selector generatePath should provide unique path for multiple elements 1`] = `"<MyComponent>:nth-of-type(1) <Functional> p"`;
+
+exports[`react-query-selector generatePath should provide unique path for multiple elements 2`] = `"<MyComponent>:nth-of-type(1) <Functional> div:nth-of-type(2)"`;
