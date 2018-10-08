@@ -62,18 +62,22 @@ export default {
     return elem.typeName;
   },
 
-  /**
-   * Does the element have the named attribute?
-   */
   hasAttrib(elem, name) {
-    throw new Error('Not Impl');
+    const { stateNode } = elem.fiber;
+    if (elem.fiber.tag === ReactTypeOfWork.HostRoot || stateNode === null) {
+      return false;
+    }
+    if (stateNode.hasAttribute) {
+      return stateNode.hasAttribute(name);
+    }
+    return stateNode.props[name] != null;
   },
-  /**
-   * get the attribute value.
-   */
   getAttributeValue(elem, name) {
-    // console.log(
-    throw new Error('Not Impl');
+    const { stateNode } = elem.fiber;
+    if (stateNode.getAttribute) {
+      return stateNode.getAttribute(name);
+    }
+    return stateNode.props[name];
   },
 
   getParent(node) {

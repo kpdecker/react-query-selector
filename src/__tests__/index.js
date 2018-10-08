@@ -116,6 +116,19 @@ describe('react-query-selector', () => {
 
       expect(querySelectorAll('<Functional>')).toHaveLength(2);
     });
+    it('should query props', () => {
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent prop="test" />
+        </span>,
+        container
+      );
+
+      expect(querySelectorAll('[prop]')).toHaveLength(1);
+      expect(querySelectorAll('<MyComponent>[prop]')).toHaveLength(1);
+      expect(querySelectorAll('<MyComponent>[prop="test"]')).toHaveLength(1);
+    });
   });
 
   describe('scoping', () => {
