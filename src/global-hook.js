@@ -1,5 +1,3 @@
-import semver from 'semver';
-
 export function findFiber(hostNode) {
   return (
     window.__REACT_DEVTOOLS_GLOBAL_HOOK__ &&
@@ -33,7 +31,7 @@ export function setupReactDom({ version }) {
   // The section below is copy-pasted from files in React repo.
   // Keep it in sync, and add version guards if it changes.
   // **********************************************************
-  if (semver.gte(version, '16.4.3-alpha')) {
+  if (version >= '16.4.3') {
     ReactTypeOfWork = {
       FunctionalComponent: 0,
       FunctionalComponentLazy: 1,
