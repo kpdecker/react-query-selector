@@ -4,18 +4,36 @@
   "main": "dist/react-query-selector.cjs.js",
   "module": "dist/react-query-selector.esm.js",
   "browser": "dist/react-query-selector.umd.js",
-  "dependencies": {},
+  "dependencies": {
+    "css-select": "^2.0.0",
+    "domutils": "^1.7.0",
+    "semver": "^5.5.1"
+  },
   "devDependencies": {
-    "babel-preset-env": "^1.6.0",
+    "@babel/core": "^7.1.2",
+    "@babel/preset-env": "^7.1.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-core": "^7.0.0-bridge.0",
+    "jest": "^23.6.0",
+    "react": "^16.3.2",
+    "react-dom": "^16.5.2",
     "rollup": "^0.46.0",
-    "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-babel": "^4.0.3",
     "rollup-plugin-commonjs": "^8.0.2",
     "rollup-plugin-node-resolve": "^3.0.0"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx}",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ]
   },
   "scripts": {
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "node test/test.js",
+    "test": "jest",
     "pretest": "npm run build"
   },
   "files": [
