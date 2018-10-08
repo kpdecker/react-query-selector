@@ -74,8 +74,14 @@ export default {
   },
   getAttributeValue(elem, name) {
     const { stateNode } = elem.fiber;
+    if (elem.fiber.tag === ReactTypeOfWork.HostRoot || stateNode === null) {
+      return undefined;
+    }
     if (stateNode.getAttribute) {
       return stateNode.getAttribute(name);
+    }
+    if (name === 'key') {
+      return stateNode._reactInternalFiber.key;
     }
     return stateNode.props[name];
   },
@@ -140,6 +146,6 @@ export default {
     */
   equals(a, b) {
     console.log(a);
-    return a === b;
+    return a.stateNode === b.stateNode;
   }
 };

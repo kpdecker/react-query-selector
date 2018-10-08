@@ -102,6 +102,21 @@ describe('react-query-selector', () => {
       expect(path2).toMatchSnapshot();
       expect(querySelector(path2)).toBe(el.previousElementSibling);
     });
+
+    it('should provide unique path from key', () => {
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent key={1} />
+        </span>,
+        container
+      );
+
+      const el = querySelector('<MyComponent>[key=1]');
+      const path = generatePath(el);
+      expect(path).toMatchSnapshot();
+      expect(querySelector(path)).toBe(el);
+    });
   });
 
   describe('querySelectorAll', () => {
@@ -128,6 +143,45 @@ describe('react-query-selector', () => {
       expect(querySelectorAll('[prop]')).toHaveLength(1);
       expect(querySelectorAll('<MyComponent>[prop]')).toHaveLength(1);
       expect(querySelectorAll('<MyComponent>[prop="test"]')).toHaveLength(1);
+
+      expect(querySelectorAll('[data-attr=1]')).toHaveLength(2);
+      expect(querySelectorAll('[data-attr=2]')).toHaveLength(0);
+    });
+
+    it('should limit to children', () => {
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent prop="test" />
+        </span>,
+        container
+      );
+
+      expect(querySelectorAll('<MyComponent> > div')).toHaveLength(2);
+    });
+
+    it('should support :empty', () => {
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent prop="test" />
+        </span>,
+        container
+      );
+
+      expect(querySelectorAll('span:empty')).toHaveLength(2);
+    });
+
+    it('should support key', () => {
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent key={1} />
+        </span>,
+        container
+      );
+
+      expect(querySelectorAll('span:empty')).toHaveLength(2);
     });
   });
 

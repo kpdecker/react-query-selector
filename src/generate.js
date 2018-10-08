@@ -6,7 +6,7 @@ import { querySelector, querySelectorAll } from '.';
 export function generatePath(hostNode) {
   // Use the React DOM to generate selector, if possible.
   let path;
-  let component = findFiber(hostNode);
+  let component = findFiber(hostNode) || hostNode._reactInternalFiber;
   if (component) {
     const domMap = generateFullDomMap();
 

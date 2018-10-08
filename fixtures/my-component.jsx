@@ -6,6 +6,7 @@ export default class MyComponent extends Component {
     return (
       <div>
         <Functional />
+        and text!
       </div>
     );
   }
