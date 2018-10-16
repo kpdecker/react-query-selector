@@ -6,10 +6,10 @@ exports[`react-query-selector generatePath should provide path for named element
 
 exports[`react-query-selector generatePath should provide path for nested elements 1`] = `"<Functional> p"`;
 
-exports[`react-query-selector generatePath should provide path for nested elements 2`] = `"<Functional> div:nth-of-type(2)"`;
+exports[`react-query-selector generatePath should provide path for nested elements 2`] = `"<Functional> aside[key=\\"2\\"]"`;
 
 exports[`react-query-selector generatePath should provide unique path for multiple elements 1`] = `"<MyComponent>:nth-of-type(1) <Functional> p"`;
 
-exports[`react-query-selector generatePath should provide unique path for multiple elements 2`] = `"<MyComponent>:nth-of-type(1) <Functional> div:nth-of-type(2)"`;
+exports[`react-query-selector generatePath should provide unique path for multiple elements 2`] = `"<MyComponent>:nth-of-type(1) <Functional> aside[key=\\"2\\"]"`;
 
 exports[`react-query-selector generatePath should provide unique path from key 1`] = `"<MyComponent>[key=\\"1\\"]"`;

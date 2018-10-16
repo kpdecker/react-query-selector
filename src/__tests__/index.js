@@ -127,6 +127,7 @@ describe('react-query-selector', () => {
 
       expect(querySelectorAll('[data-attr=1]')).toHaveLength(2);
       expect(querySelectorAll('[data-attr=2]')).toHaveLength(0);
+      expect(querySelectorAll('[key=2]')).toHaveLength(2);
     });
 
     it('should limit to children', () => {

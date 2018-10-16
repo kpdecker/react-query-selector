@@ -1,7 +1,6 @@
 import { findFiber } from './global-hook';
 import { getTypeName } from './adapter';
 import { generateFullDomMap } from './map';
-import { querySelector, querySelectorAll } from '.';
 
 export function generatePath(hostNode) {
   // Use the React DOM to generate selector, if possible.
