@@ -1,8 +1,9 @@
+import './global-hook';
+
 import cssSelect from 'css-select';
 
 import adapter from './adapter';
-import { generateFullDomMap, generateQueryTree } from './map';
-import { setupReactDom } from './global-hook';
+import { generateQueryTree } from './map';
 export { generatePath } from './generate';
 
 export function querySelector(selector, scope) {
@@ -21,14 +22,4 @@ export function querySelectorAll(selector, scope) {
     adapter,
     xmlMode: true
   });
-}
-
-if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined') {
-  Object.values(__REACT_DEVTOOLS_GLOBAL_HOOK__._renderers).forEach(
-    setupReactDom
-  );
-
-  __REACT_DEVTOOLS_GLOBAL_HOOK__.on('renderer', ({ renderer }) =>
-    setupReactDom(renderer)
-  );
 }

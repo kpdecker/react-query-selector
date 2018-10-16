@@ -1,18 +1,11 @@
 export function findFiber(hostNode) {
-  return (
-    window.__REACT_DEVTOOLS_GLOBAL_HOOK__ &&
-    Object.values(window.__REACT_DEVTOOLS_GLOBAL_HOOK__._renderers).reduce(
-      (prev, renderer) => prev || renderer.findFiberByHostInstance(hostNode),
-      undefined
-    )
+  return Object.values(window.__REACT_DEVTOOLS_GLOBAL_HOOK__._renderers).reduce(
+    (prev, renderer) => prev || renderer.findFiberByHostInstance(hostNode),
+    undefined
   );
 }
 
 export function fiberRoots() {
-  if (!window.__REACT_DEVTOOLS_GLOBAL_HOOK__) {
-    return [];
-  }
-
   return [].concat(
     ...Object.values(window.__REACT_DEVTOOLS_GLOBAL_HOOK__._fiberRoots).map(
       root => Array.from(root)
@@ -22,7 +15,7 @@ export function fiberRoots() {
 
 export let ReactTypeOfWork;
 
-export function setupReactDom({ version }) {
+function setupReactDom({ version }) {
   // **********************************************************
   // The section below is copy-pasted from files in React DevTools repo.
   // Keep it in sync, and add version guards if it changes.
@@ -75,4 +68,46 @@ export function setupReactDom({ version }) {
       Placeholder: 16
     };
   }
+}
+
+if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined') {
+  Object.values(__REACT_DEVTOOLS_GLOBAL_HOOK__._renderers).forEach(
+    setupReactDom
+  );
+
+  __REACT_DEVTOOLS_GLOBAL_HOOK__.on('renderer', ({ renderer }) =>
+    setupReactDom(renderer)
+  );
+} else {
+  // Provide our own hook implementation if not running in a devtools environment
+  let hook;
+  window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = hook = {
+    _renderers: [],
+    _fiberRoots: [],
+    inject: instance => {
+      hook._renderers.push(instance);
+      hook._fiberRoots.push([]);
+      setupReactDom(instance);
+      return hook._renderers.length - 1;
+    },
+    onCommitFiberRoot: (rendererId, root) => {
+      const mountedRoots = hook._fiberRoots[rendererId];
+      const current = root.current;
+      const isKnownRoot = mountedRoots.includes(root);
+      const isUnmounting =
+        current.memoizedState == null || current.memoizedState.element == null;
+      // Keep track of mounted roots so we can hydrate when DevTools connect.
+      if (!isKnownRoot && !isUnmounting) {
+        hook._fiberRoots[rendererId].push(root);
+      } else if (isKnownRoot && isUnmounting) {
+        hook.onCommitFiberUnmount(rendererId, root);
+      }
+    },
+    onCommitFiberUnmount: (rendererId, root) => {
+      hook._fiberRoots[rendererId] = hook._fiberRoots[rendererId].filter(
+        current => current !== root
+      );
+    },
+    supportsFiber: true
+  };
 }

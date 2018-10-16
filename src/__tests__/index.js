@@ -2,7 +2,6 @@ import React from 'react';
 import ReactQuerSelector, { querySelector, querySelectorAll } from '..';
 import { generatePath } from '../generate';
 import MyComponent from '../../fixtures/my-component';
-import { setupReactDom } from '../global-hook';
 
 const App = () => {
   return (
@@ -12,26 +11,8 @@ const App = () => {
   );
 };
 
-let hook;
-global.__REACT_DEVTOOLS_GLOBAL_HOOK__ = hook = {
-  _renderers: [],
-  _fiberRoots: [],
-  inject: instance => {
-    hook._renderers.push(instance);
-    hook._fiberRoots.push([]);
-    setupReactDom(instance);
-    return hook._renderers.length - 1;
-  },
-  onCommitFiberRoot: jest.fn((rendererId, root) => {
-    hook._fiberRoots[rendererId].push(root);
-  }),
-  onCommitFiberUnmount: (rendererId, root) => {
-    hook._fiberRoots[rendererId] = hook._fiberRoots[rendererId].filter(
-      current => current !== root
-    );
-  },
-  supportsFiber: true
-};
+const hook = global.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+hook.onCommitFiberRoot = jest.fn(hook.onCommitFiberRoot);
 
 describe('react-query-selector', () => {
   const container = document.body.appendChild(document.createElement('div'));
