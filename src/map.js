@@ -1,6 +1,14 @@
 import { fiberRoots } from './global-hook';
 import { getTypeName, childOfType } from './adapter';
 
+function SelectNode(fiber, parent) {
+  this.typeName = getTypeName(fiber).replace(/[<>]/g, '_');
+  this.tag = fiber.tag;
+  this.fiber = fiber;
+  this.parent = parent;
+  this.children = [];
+}
+
 export function generateQueryTree(scope) {
   return fiberRoots()
     .map(root => {
@@ -37,13 +45,7 @@ function generateTreeNode(scope, fiber, parent) {
       return generateTreeNode(scope, fiber.child, parent);
     }
   }
-  let ret = {
-    typeName: getTypeName(fiber).replace(/[<>]/g, '_'),
-    tag: fiber.tag,
-    fiber,
-    parent,
-    children: []
-  };
+  let ret = new SelectNode(fiber, parent);
   if (parent) {
     parent.children.push(ret);
   }
