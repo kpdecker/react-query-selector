@@ -4,6 +4,8 @@ import cssSelect from 'css-select';
 
 import adapter from './adapter';
 import { generateQueryTree } from './map';
+
+export { componentDOMNodes } from './map';
 export { generatePath } from './generate';
 
 export function querySelector(selector, scope) {

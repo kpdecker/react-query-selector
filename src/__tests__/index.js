@@ -1,7 +1,8 @@
 import React from 'react';
-import ReactQuerSelector, { querySelector, querySelectorAll } from '..';
+import React, { Fragment } from 'react';
 import { generatePath } from '../generate';
 import MyComponent from '../../fixtures/my-component';
+import { componentDOMNodes } from '../map';
 
 const App = () => {
   return (
@@ -201,5 +202,38 @@ describe('react-query-selector', () => {
         querySelectorAll('<Functional>', querySelector('span'))
       ).toHaveLength(2);
     });
+
+  describe('componentDOMNodes', () => {
+    it('should return fragments', () => {
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent />
+          <Fragment>
+            <div />
+            <div />
+          </Fragment>
+        </span>,
+        container
+      );
+
+      expect(componentDOMNodes(querySelector('<Fragment>'))).toHaveLength(2);
+    });
+    it('should return Arrays', () => {
+      ReactDOM.render(
+        <span>
+          <MyArray />
+          <MyComponent />
+          <Fragment>
+            <div />
+            <div />
+          </Fragment>
+        </span>,
+        container
+      );
+
+      expect(componentDOMNodes(querySelector('<MyArray>'))).toHaveLength(2);
+    });
+  });
   });
 });

@@ -7,6 +7,20 @@ export function getTypeName(node) {
     return `<${typeName.displayName.replace(/[()]/g, '_')}>`;
   } else if (typeof typeName === 'function') {
     return `<${typeName.name || 'Anonymous'}>`;
+  } else if (node.tag === ReactTypeOfWork.Fragment) {
+    return '<Fragment>';
+  }
+
+  return typeName;
+}
+export function getDisplayName(node) {
+  let typeName = node.type || '';
+  if (typeName.displayName) {
+    return typeName.displayName;
+  } else if (typeof typeName === 'function') {
+    return typeName.name || 'Anonymous';
+  } else if (node.tag === ReactTypeOfWork.Fragment) {
+    return 'Fragment';
   }
 
   return typeName;
@@ -34,6 +48,19 @@ export function childOfType(node, parent) {
   }
 
   return { ofType, index: ofType.indexOf(node) + 1 };
+}
+
+function mapSelectNode(selectNode) {
+  const { fiber = {} } = selectNode;
+
+  if (fiber.tag === ReactTypeOfWork.FunctionalComponent) {
+    return {
+      displayName: selectNode.displayName,
+      props: fiber.memoizedProps,
+      _reactInternalFiber: fiber
+    };
+  }
+  return fiber.stateNode || selectNode;
 }
 
 export default {
@@ -127,7 +154,7 @@ export default {
       if (elem.children && elem.children.length > 0) {
         stack.unshift.apply(stack, elem.children);
       }
-      if (test(elem)) result.push(elem);
+      if (test(elem)) result.push(mapSelectNode(elem));
     }
     return result;
   },
@@ -138,7 +165,7 @@ export default {
       if (!this.isTag(elems[i])) {
         continue;
       } else if (test(elems[i])) {
-        elem = elems[i].fiber.stateNode;
+        elem = mapSelectNode(elems[i]);
       } else if (elems[i].children.length > 0) {
         elem = this.findOne(test, elems[i].children);
       }

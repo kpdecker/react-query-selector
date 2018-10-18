@@ -9,6 +9,33 @@ function SelectNode(fiber, parent) {
   this.children = [];
 }
 
+export function componentDOMNodes(component) {
+  if (!component) {
+    return [];
+  }
+  if (component.cloneNode && component.nodeType) {
+    // This is a DOM not (probably...)
+    return [component];
+  }
+
+  const fiber =
+    component._reactInternalFiber ||
+    component.fiber ||
+    (component.constructor.name === 'FiberNode' && component);
+  if (fiber.tag === ReactTypeOfWork.HostComponent) {
+    return [fiber.stateNode];
+  }
+
+  let children = [];
+  let child = fiber.child;
+
+  do {
+    children = children.concat(componentDOMNodes(child));
+  } while ((child = child.sibling));
+
+  return children;
+}
+
 export function generateQueryTree(scope) {
   return fiberRoots()
     .map(root => {
