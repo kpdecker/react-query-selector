@@ -165,6 +165,19 @@ describe('react-query-selector', () => {
 
       expect(querySelectorAll('span:empty')).toHaveLength(2);
     });
+
+    it('should support attributes on functional elements', () => {
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent value={4} />
+        </span>,
+        container
+      );
+
+      expect(querySelectorAll('<Functional>[value]')).toHaveLength(1);
+      expect(querySelectorAll('<Functional>[value=4]')).toHaveLength(1);
+    });
   });
 
   describe('scoping', () => {

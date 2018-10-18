@@ -63,7 +63,13 @@ export default {
   },
 
   hasAttrib(elem, name) {
-    const { stateNode } = elem.fiber;
+    const { key, memoizedProps, stateNode } = elem.fiber;
+    if (name === 'key') {
+      return key != null;
+    }
+    if (memoizedProps && memoizedProps[name] != null) {
+      return true;
+    }
     if (elem.fiber.tag === ReactTypeOfWork.HostRoot || stateNode === null) {
       return false;
     }
@@ -73,17 +79,20 @@ export default {
     return stateNode.props[name] != null;
   },
   getAttributeValue(elem, name) {
-    const { stateNode } = elem.fiber;
+    const { key, memoizedProps, stateNode } = elem.fiber;
+    if (name === 'key') {
+      return key;
+    }
+    if (memoizedProps && memoizedProps[name] != null) {
+      return `${memoizedProps[name]}`;
+    }
     if (elem.fiber.tag === ReactTypeOfWork.HostRoot || stateNode === null) {
       return undefined;
-    }
-    if (name === 'key') {
-      return elem.fiber.key;
     }
     if (stateNode.getAttribute) {
       return stateNode.getAttribute(name);
     }
-    return stateNode.props[name];
+    return `${stateNode.props[name]}`;
   },
 
   getParent(node) {

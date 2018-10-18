@@ -5,7 +5,7 @@ export default class MyComponent extends Component {
   render() {
     return (
       <div>
-        <Functional />
+        <Functional value={this.props.value} />
         and text!
       </div>
     );
