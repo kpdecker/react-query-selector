@@ -1,5 +1,10 @@
 import React from 'react';
 import React, { Fragment } from 'react';
+import ReactQuerSelector, {
+  querySelector,
+  querySelectorAll,
+  dumpTree
+} from '..';
 import { generatePath } from '../generate';
 import MyComponent from '../../fixtures/my-component';
 import { componentDOMNodes } from '../map';
@@ -235,5 +240,22 @@ describe('react-query-selector', () => {
       expect(componentDOMNodes(querySelector('<MyArray>'))).toHaveLength(2);
     });
   });
+
+  describe('dumpTree', () => {
+    it('should handle fragments', () => {
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent />
+          <Fragment>
+            <div />
+            <div />
+          </Fragment>
+        </span>,
+        container
+      );
+
+      expect(dumpTree()).toMatchSnapshot();
+    });
   });
 });

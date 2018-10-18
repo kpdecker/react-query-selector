@@ -1,8 +1,9 @@
-import { fiberRoots } from './global-hook';
-import { getTypeName, childOfType } from './adapter';
+import { fiberRoots, ReactTypeOfWork } from './global-hook';
+import { getTypeName, getDisplayName, childOfType } from './adapter';
 
 function SelectNode(fiber, parent) {
   this.typeName = getTypeName(fiber).replace(/[<>]/g, '_');
+  this.displayName = getDisplayName(fiber);
   this.tag = fiber.tag;
   this.fiber = fiber;
   this.parent = parent;
