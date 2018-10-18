@@ -41,15 +41,13 @@ export function generateQueryTree(scope) {
   return fiberRoots()
     .map(root => {
       if (scope) {
-        let scopeDom;
-        if (scope._reactInternalFiber) {
-          scopeDom = scope._reactInternalFiber.return.stateNode;
-        } else if (scope.contains) {
-          scopeDom = scope;
-        }
-        if (scopeDom.contains(root.containerInfo)) {
+        let scopeDom = componentDOMNodes(scope);
+        if (scopeDom.find(scopeDom => scopeDom.contains(root.containerInfo))) {
+          // Scope is a superset of this root, remove all filtering
           scope = undefined;
-        } else if (!root.containerInfo.contains(scopeDom)) {
+        } else if (
+          !scopeDom.find(scopeDom => root.containerInfo.contains(scopeDom))
+        ) {
           // DOM Scope and both are unrelated in DOM structure
           return;
         }
@@ -65,12 +63,19 @@ function generateTreeNode(scope, fiber, parent) {
   }
   if (scope) {
     if (
+      scope._reactInternalFiber !== fiber &&
       scope !== fiber.stateNode &&
-      scope !== (fiber.return && fiber.return.stateNode) &&
-      scope.stateNode !== fiber.stateNode &&
-      scope.stateNode !== (fiber.return && fiber.return.stateNode)
+      scope.stateNode !== fiber.stateNode
     ) {
-      return generateTreeNode(scope, fiber.child, parent);
+      let child = fiber.child;
+      while (child) {
+        let ret = generateTreeNode(scope, child, parent);
+        if (ret) {
+          return ret;
+        }
+        child = child.sibling;
+      }
+      return undefined;
     }
   }
   let ret = new SelectNode(fiber, parent);

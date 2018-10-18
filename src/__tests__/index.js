@@ -1,4 +1,3 @@
-import React from 'react';
 import React, { Fragment } from 'react';
 import ReactQuerSelector, {
   querySelector,
@@ -7,6 +6,7 @@ import ReactQuerSelector, {
 } from '..';
 import { generatePath } from '../generate';
 import MyComponent from '../../fixtures/my-component';
+import MyArray from '../../fixtures/my-array';
 import { componentDOMNodes } from '../map';
 
 const App = () => {
@@ -207,6 +207,51 @@ describe('react-query-selector', () => {
         querySelectorAll('<Functional>', querySelector('span'))
       ).toHaveLength(2);
     });
+    it('should scope to secondary child', () => {
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent value={4} />
+        </span>,
+        container
+      );
+
+      const functional = querySelectorAll(
+        '<Functional>',
+        querySelector('<MyComponent>:nth-child(2)')
+      );
+      expect(functional).toHaveLength(1);
+      expect(functional[0].props.value).toBe(4);
+    });
+
+    it('should scope to array components', () => {
+      ReactDOM.render(
+        <span>
+          <MyArray />
+          <span />
+        </span>,
+        container
+      );
+
+      expect(querySelectorAll('span')).toHaveLength(4);
+      expect(querySelectorAll('span', querySelector('<MyArray>'))).toHaveLength(
+        2
+      );
+    });
+  });
+  it('should scope to DOM components', () => {
+    ReactDOM.render(
+      <div>
+        <MyArray />
+        <span />
+      </div>,
+      container
+    );
+
+    expect(
+      querySelectorAll('span', document.querySelector('div'))
+    ).toHaveLength(3);
+  });
 
   describe('componentDOMNodes', () => {
     it('should return fragments', () => {
