@@ -2,25 +2,51 @@ import DomUtils from 'domutils';
 import { ReactTypeOfWork } from './global-hook';
 
 export function getTypeName(node) {
-  let typeName = node.type || '';
+  if (node.tag === ReactTypeOfWork.HostText) {
+    return '<Text>';
+  }
+  if (node.tag === ReactTypeOfWork.Fragment) {
+    return '<Fragment>';
+  }
+  if (node.tag === ReactTypeOfWork.SuspenseComponent) {
+    return '<Suspense>';
+  }
+  if (node.tag === ReactTypeOfWork.LazyComponent) {
+    debugger;
+    return '<Lazy>';
+  }
+
+  let typeName = node.type ? node.type.type || node.type : '';
   if (typeName.displayName) {
     return `<${typeName.displayName.replace(/[()]/g, '_')}>`;
   } else if (typeof typeName === 'function') {
     return `<${typeName.name || 'Anonymous'}>`;
-  } else if (node.tag === ReactTypeOfWork.Fragment) {
-    return '<Fragment>';
   }
 
   return typeName;
 }
 export function getDisplayName(node) {
-  let typeName = node.type || '';
+  if (node.tag === ReactTypeOfWork.HostRoot) {
+    return 'Root';
+  }
+  if (node.tag === ReactTypeOfWork.HostText) {
+    return 'Text';
+  }
+  if (node.tag === ReactTypeOfWork.Fragment) {
+    return 'Fragment';
+  }
+  if (node.tag === ReactTypeOfWork.SuspenseComponent) {
+    return 'Suspense';
+  }
+  if (node.tag === ReactTypeOfWork.LazyComponent) {
+    return 'Lazy';
+  }
+
+  let typeName = node.type ? node.type.type || node.type : '';
   if (typeName.displayName) {
     return typeName.displayName;
   } else if (typeof typeName === 'function') {
     return typeName.name || 'Anonymous';
-  } else if (node.tag === ReactTypeOfWork.Fragment) {
-    return 'Fragment';
   }
 
   return typeName;
@@ -70,6 +96,9 @@ export default {
       node.tag === ReactTypeOfWork.FunctionalComponentLazy ||
       node.tag === ReactTypeOfWork.ClassComponent ||
       node.tag === ReactTypeOfWork.ClassComponentLazy ||
+      node.tag === ReactTypeOfWork.MemoComponent ||
+      node.tag === ReactTypeOfWork.SimpleMemoComponent ||
+      node.tag === ReactTypeOfWork.SuspenseComponent ||
       // || node.tag === ReactTypeOfWork.IndeterminateComponent
       node.tag === ReactTypeOfWork.HostRoot ||
       node.tag === ReactTypeOfWork.HostPortal ||
@@ -133,8 +162,8 @@ export default {
   },
 
   /*
-     * Get the text content of the node, and its children if it has any.
-     */
+   * Get the text content of the node, and its children if it has any.
+   */
   getText(node) {
     // string;
     throw new Error('Not Impl');

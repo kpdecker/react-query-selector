@@ -19,12 +19,36 @@ function setupReactDom({ version }) {
   // **********************************************************
   // The section below is copy-pasted from files in React DevTools repo.
   // Keep it in sync, and add version guards if it changes.
-  // https://github.com/facebook/react-devtools/blob/69d137c7feb95c1559ffe54045d518fb86e19e05/backend/attachRendererFiber.js#L28
+  // https://github.com/facebook/react-devtools/blob/master/backend/attachRendererFiber.js
   // **********************************************************
   // The section below is copy-pasted from files in React repo.
   // Keep it in sync, and add version guards if it changes.
   // **********************************************************
-  if (version >= '16.4.3') {
+  if (version >= '16.6.0') {
+    ReactTypeOfWork = {
+      FunctionalComponent: 0,
+      ClassComponent: 1,
+      IndeterminateComponent: 2,
+      HostRoot: 3,
+      HostPortal: 4,
+      HostComponent: 5,
+      HostText: 6,
+      Fragment: 7,
+      Mode: 8,
+      ContextConsumer: 9,
+      ContextProvider: 10,
+      ForwardRef: 11,
+      Profiler: 12,
+      SuspenseComponent: 13,
+      MemoComponent: 14,
+      SimpleMemoComponent: 15,
+      LazyComponent: 16,
+      IncompleteClassComponent: 17,
+      CoroutineComponent: -1, // Removed
+      CoroutineHandlerPhase: -1, // Removed
+      YieldComponent: -1 // Removed
+    };
+  } else if (version >= '16.4.3') {
     ReactTypeOfWork = {
       FunctionalComponent: 0,
       FunctionalComponentLazy: 1,

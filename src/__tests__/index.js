@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Suspense, lazy } from 'react';
 import ReactQuerSelector, {
   querySelector,
   querySelectorAll,
@@ -183,6 +183,58 @@ describe('react-query-selector', () => {
 
       expect(querySelectorAll('<Functional>[value]')).toHaveLength(1);
       expect(querySelectorAll('<Functional>[value=4]')).toHaveLength(1);
+    });
+
+    it('should support attributes on memo elements', () => {
+      const MyFunction = () => 'test';
+      const Memo = React.memo(MyFunction);
+      ReactDOM.render(
+        <span>
+          <MyFunction />
+          <Memo value={4} />
+        </span>,
+        container
+      );
+
+      expect(dumpTree()).toMatchSnapshot();
+      expect(querySelectorAll('<MyFunction>[value]')).toHaveLength(1);
+      expect(querySelectorAll('<MyFunction>[value=4]')).toHaveLength(1);
+    });
+
+    it('should support attributes on lazy + suspense elements', done => {
+      const OtherComponent = lazy(() =>
+        Promise.resolve({ default: () => <nav>here</nav> })
+      );
+
+      function MySuspense() {
+        return (
+          <Suspense fallback={<aside>Loading...</aside>}>
+            <OtherComponent />
+          </Suspense>
+        );
+      }
+      const MyFunction = () => 'test';
+      const Memo = React.memo(MyFunction);
+      ReactDOM.render(
+        <span>
+          <MySuspense />
+          <MySuspense value={4} />
+        </span>,
+        container
+      );
+
+      expect(dumpTree()).toMatchSnapshot();
+      expect(querySelectorAll('aside')).toHaveLength(2);
+      expect(querySelectorAll('nav')).toHaveLength(0);
+      expect(querySelectorAll('<MySuspense>[value]')).toHaveLength(1);
+      expect(querySelectorAll('<MySuspense>[value=4]')).toHaveLength(1);
+
+      setTimeout(() => {
+        expect(dumpTree()).toMatchSnapshot();
+        expect(querySelectorAll('aside')).toHaveLength(0);
+        expect(querySelectorAll('nav')).toHaveLength(2);
+        done();
+      }, 100);
     });
   });
 

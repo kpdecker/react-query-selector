@@ -2,7 +2,7 @@
 
 exports[`react-query-selector dumpTree should handle fragments 1`] = `
 Array [
-  "<>
+  "<Root>
   <span>
     <MyComponent>
       <div>
@@ -14,7 +14,7 @@ Array [
           <span/>
 
         </Functional>
-        </>
+        <Text/>
 
       </div>
 
@@ -29,7 +29,7 @@ Array [
           <span/>
 
         </Functional>
-        </>
+        <Text/>
 
       </div>
 
@@ -42,7 +42,7 @@ Array [
 
   </span>
 
-</>
+</Root>
 ",
 ]
 `;
@@ -60,3 +60,95 @@ exports[`react-query-selector generatePath should provide unique path for multip
 exports[`react-query-selector generatePath should provide unique path for multiple elements 2`] = `"<MyComponent>:nth-of-type(1) <Functional> aside[key=\\"2\\"]"`;
 
 exports[`react-query-selector generatePath should provide unique path from key 1`] = `"<MyComponent>[key=\\"1\\"]"`;
+
+exports[`react-query-selector querySelectorAll should support attributes on lazy + suspense elements 1`] = `
+Array [
+  "<Root>
+  <span>
+    <MySuspense>
+      <Suspense>
+        <Fragment>
+          <Lazy/>
+
+        </Fragment>
+        <Fragment>
+          <aside/>
+
+        </Fragment>
+
+      </Suspense>
+
+    </MySuspense>
+    <MySuspense>
+      <Suspense>
+        <Fragment>
+          <Lazy/>
+
+        </Fragment>
+        <Fragment>
+          <aside/>
+
+        </Fragment>
+
+      </Suspense>
+
+    </MySuspense>
+
+  </span>
+
+</Root>
+",
+]
+`;
+
+exports[`react-query-selector querySelectorAll should support attributes on lazy + suspense elements 2`] = `
+Array [
+  "<Root>
+  <span>
+    <MySuspense>
+      <Suspense>
+        <default>
+          <nav/>
+
+        </default>
+
+      </Suspense>
+
+    </MySuspense>
+    <MySuspense>
+      <Suspense>
+        <default>
+          <nav/>
+
+        </default>
+
+      </Suspense>
+
+    </MySuspense>
+
+  </span>
+
+</Root>
+",
+]
+`;
+
+exports[`react-query-selector querySelectorAll should support attributes on memo elements 1`] = `
+Array [
+  "<Root>
+  <span>
+    <MyFunction>
+      <Text/>
+
+    </MyFunction>
+    <MyFunction>
+      <Text/>
+
+    </MyFunction>
+
+  </span>
+
+</Root>
+",
+]
+`;
