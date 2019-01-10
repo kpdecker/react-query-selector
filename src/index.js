@@ -9,21 +9,52 @@ export { componentDOMNodes } from './map';
 export { generatePath } from './generate';
 
 export function querySelector(selector, scope) {
-  const roots = generateQueryTree(scope);
-  selector = selector.replace(/<(.*?)>/g, '_$1_');
-  return cssSelect.selectOne(selector, roots, {
-    adapter,
-    xmlMode: true
-  });
+  try {
+    const roots = generateQueryTree(scope);
+    selector = selector.replace(/<(.*?)>/g, '_$1_');
+    const reactComponent = cssSelect.selectOne(selector, roots, {
+      adapter,
+      xmlMode: true
+    });
+    if (reactComponent) {
+      return reactComponent;
+    }
+  } catch (err) {
+    const toThrow = new Error(`Error Evaluating ${selector}: ${err.message}`);
+    toThrow.stack = err.stack;
+    throw toThrow;
+  }
+  try {
+    return (scope || document).querySelector(selector) || undefined;
+  } catch (err) {
+    /* nop */
+  }
 }
 
 export function querySelectorAll(selector, scope) {
-  const roots = generateQueryTree(scope);
-  selector = selector.replace(/<(.*?)>/g, '_$1_');
-  return cssSelect.selectAll(selector, roots, {
-    adapter,
-    xmlMode: true
-  });
+  try {
+    const roots = generateQueryTree(scope);
+    selector = selector.replace(/<(.*?)>/g, '_$1_');
+    const reactComponents = cssSelect.selectAll(selector, roots, {
+      adapter,
+      xmlMode: true
+    });
+    if (reactComponents.length) {
+      return reactComponents;
+    }
+  } catch (err) {
+    const toThrow = new Error(`Error Evaluating ${selector}: ${err.message}`);
+    toThrow.stack = err.stack;
+    throw toThrow;
+  }
+
+  try {
+    return (scope || document).querySelectorAll(selector);
+  } catch (err) {
+    /* nop */
+  }
+
+  return [];
 }
 
 export function dumpTree(scope) {
