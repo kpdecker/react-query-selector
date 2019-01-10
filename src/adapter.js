@@ -81,6 +81,7 @@ function mapSelectNode(selectNode) {
 
   if (fiber.tag === ReactTypeOfWork.FunctionalComponent) {
     return {
+      [Symbol.toStringTag]: 'SelectNode',
       displayName: selectNode.displayName,
       props: fiber.memoizedProps,
       _reactInternalFiber: fiber
