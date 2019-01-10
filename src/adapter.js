@@ -130,10 +130,16 @@ export default {
     if (elem.fiber.tag === ReactTypeOfWork.HostRoot || stateNode === null) {
       return false;
     }
+    if (stateNode.containerInfo) {
+      return stateNode.containerInfo.hasAttribute(name);
+    }
     if (stateNode.hasAttribute) {
       return stateNode.hasAttribute(name);
     }
-    return stateNode.props[name] != null;
+    if (stateNode.props) {
+      return stateNode.props[name] != null;
+    }
+    throw new Error('Unknown node');
   },
   getAttributeValue(elem, name) {
     const { key, memoizedProps, stateNode } = elem.fiber;
@@ -146,10 +152,16 @@ export default {
     if (elem.fiber.tag === ReactTypeOfWork.HostRoot || stateNode === null) {
       return undefined;
     }
+    if (stateNode.containerInfo) {
+      return stateNode.containerInfo.getAttribute(name);
+    }
     if (stateNode.getAttribute) {
       return stateNode.getAttribute(name);
     }
-    return `${stateNode.props[name]}`;
+    if (stateNode.props) {
+      return `${stateNode.props[name]}`;
+    }
+    throw new Error('Unknown node');
   },
 
   getParent(node) {
