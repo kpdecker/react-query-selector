@@ -336,6 +336,19 @@ describe('react-query-selector', () => {
 
       expect(componentDOMNodes(querySelector('<MyArray>'))).toHaveLength(2);
     });
+    it('should return null values', () => {
+      const MyFunction = () => null;
+      const Memo = React.memo(MyFunction);
+      ReactDOM.render(
+        <span>
+          <Memo />
+        </span>,
+        container
+      );
+
+      //  Not throwing is part of success case
+      expect(componentDOMNodes(querySelector('<MyFunction>'))).toHaveLength(0);
+    });
   });
 
   describe('dumpTree', () => {

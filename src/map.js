@@ -30,9 +30,10 @@ export function componentDOMNodes(component) {
   let children = [];
   let child = fiber.child;
 
-  do {
+  while (child) {
     children = children.concat(componentDOMNodes(child));
-  } while ((child = child.sibling));
+    child = child.sibling;
+  }
 
   return children;
 }
