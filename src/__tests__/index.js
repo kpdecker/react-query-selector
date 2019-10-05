@@ -37,7 +37,7 @@ describe('react-query-selector', () => {
     ReactDOM.render(<App />, container);
 
     expect(hook.onCommitFiberRoot).toHaveBeenCalledTimes(1);
-    expect(hook._renderers).toHaveLength(1);
+    expect(hook.renderers).toHaveLength(1);
   });
 
   describe('generatePath', () => {

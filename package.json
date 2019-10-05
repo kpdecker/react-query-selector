@@ -5,7 +5,7 @@
   "module": "dist/react-query-selector.esm.js",
   "browser": "dist/react-query-selector.umd.js",
   "dependencies": {
-    "css-select": "^2.0.0",
+    "css-select": "^2.0.2",
     "domutils": "^1.7.0"
   },
   "devDependencies": {
@@ -15,13 +15,13 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "jest": "^23.6.0",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
-    "rollup": "^0.66.4",
-    "rollup-plugin-babel": "^4.0.3",
-    "rollup-plugin-commonjs": "^9.1.8",
-    "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-node-resolve": "^3.4.0"
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "rollup": "^1.23.1",
+    "rollup-plugin-babel": "^4.3.3",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0"
   },
   "jest": {
     "collectCoverage": true,

@@ -1,15 +1,28 @@
 export function findFiber(hostNode) {
-  return Object.values(window.__REACT_DEVTOOLS_GLOBAL_HOOK__._renderers).reduce(
+  const hook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+  const renderers = hook.renderers
+    ? Array.from(hook.renderers.values())
+    : Object.values(hook._renderers);
+
+  return renderers.reduce(
     (prev, renderer) => prev || renderer.findFiberByHostInstance(hostNode),
     undefined
   );
 }
 
 export function fiberRoots() {
+  const hook = window.__REACT_DEVTOOLS_GLOBAL_HOOK__;
+  if (hook.renderers) {
+    hook;
+    return [].concat(
+      ...Array.from(hook.renderers.keys()).map(renderer =>
+        Array.from(hook.getFiberRoots(renderer))
+      )
+    );
+  }
+
   return [].concat(
-    ...Object.values(window.__REACT_DEVTOOLS_GLOBAL_HOOK__._fiberRoots).map(
-      root => Array.from(root)
-    )
+    ...Object.values(hook._fiberRoots).map(root => Array.from(root))
   );
 }
 
@@ -24,7 +37,13 @@ function setupReactDom({ version }) {
   // The section below is copy-pasted from files in React repo.
   // Keep it in sync, and add version guards if it changes.
   // **********************************************************
-  if (version >= '16.6.0') {
+  if (!version.startsWith('16.')) {
+    throw new Error('Only react 16 is supported');
+  }
+
+  const versionNumber = parseFloat(version.replace(/^16\./, ''));
+
+  if (versionNumber >= 6.0) {
     ReactTypeOfWork = {
       FunctionalComponent: 0,
       ClassComponent: 1,
@@ -44,11 +63,20 @@ function setupReactDom({ version }) {
       SimpleMemoComponent: 15,
       LazyComponent: 16,
       IncompleteClassComponent: 17,
+
+      // Warn tracked here, but may not not necessarily implemented
+      // correctly as these are new and unstable APIs. May need to
+      // be revisited in the future.
+      DehydratedFragment: 18,
+      SuspenseListComponent: 19,
+      FundamentalComponent: 20,
+      ScopeComponent: 21,
+
       CoroutineComponent: -1, // Removed
       CoroutineHandlerPhase: -1, // Removed
       YieldComponent: -1 // Removed
     };
-  } else if (version >= '16.4.3') {
+  } else if (versionNumber >= 4.3) {
     ReactTypeOfWork = {
       FunctionalComponent: 0,
       FunctionalComponentLazy: 1,
@@ -95,9 +123,10 @@ function setupReactDom({ version }) {
 }
 
 if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined') {
-  Object.values(__REACT_DEVTOOLS_GLOBAL_HOOK__._renderers).forEach(
-    setupReactDom
-  );
+  Object.values(
+    __REACT_DEVTOOLS_GLOBAL_HOOK__.renderers ||
+      __REACT_DEVTOOLS_GLOBAL_HOOK__._renderers
+  ).forEach(setupReactDom);
 
   __REACT_DEVTOOLS_GLOBAL_HOOK__.on('renderer', ({ renderer }) =>
     setupReactDom(renderer)
@@ -106,13 +135,16 @@ if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== 'undefined') {
   // Provide our own hook implementation if not running in a devtools environment
   let hook;
   window.__REACT_DEVTOOLS_GLOBAL_HOOK__ = hook = {
-    _renderers: [],
+    renderers: [],
     _fiberRoots: [],
+    getFiberRoots(rendererId) {
+      return hook._fiberRoots[rendererId];
+    },
     inject: instance => {
-      hook._renderers.push(instance);
+      hook.renderers.push(instance);
       hook._fiberRoots.push([]);
       setupReactDom(instance);
-      return hook._renderers.length - 1;
+      return hook.renderers.length - 1;
     },
     onCommitFiberRoot: (rendererId, root) => {
       const mountedRoots = hook._fiberRoots[rendererId];

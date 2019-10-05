@@ -100,12 +100,14 @@ export default {
       node.tag === ReactTypeOfWork.MemoComponent ||
       node.tag === ReactTypeOfWork.SimpleMemoComponent ||
       node.tag === ReactTypeOfWork.SuspenseComponent ||
+      node.tag === ReactTypeOfWork.SuspenseListComponent ||
       // || node.tag === ReactTypeOfWork.IndeterminateComponent
       node.tag === ReactTypeOfWork.HostRoot ||
       node.tag === ReactTypeOfWork.HostPortal ||
       node.tag === ReactTypeOfWork.HostComponent ||
       // || node.tag === ReactTypeOfWork.HostText
-      node.tag === ReactTypeOfWork.Fragment
+      node.tag === ReactTypeOfWork.Fragment ||
+      node.tag === ReactTypeOfWork.DehydratedFragment
     );
     // || node.tag === ReactTypeOfWork.Mode
     // || node.tag === ReactTypeOfWork.ContextConsumer
