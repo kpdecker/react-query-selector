@@ -53,7 +53,25 @@ export function generateQueryTree(scope) {
           return;
         }
       }
-      return generateTreeNode(scope, root.current);
+
+      let treeNode = generateTreeNode(scope, root.current);
+      let current = root.current.stateNode.containerInfo;
+
+      // Record host components for all parents of the react
+      // root, filtering document from the iteration
+      while (current && current.parentNode) {
+        let currentTree = treeNode;
+        treeNode = new SelectNode({
+          tag: ReactTypeOfWork.HostComponent,
+          type: current.tagName.toLowerCase(),
+          stateNode: current
+        });
+        currentTree.parent = treeNode;
+        treeNode.children.push(currentTree);
+        current = current.parentNode;
+      }
+
+      return treeNode;
     })
     .filter(Boolean);
 }

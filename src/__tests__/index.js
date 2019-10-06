@@ -22,6 +22,8 @@ hook.onCommitFiberRoot = jest.fn(hook.onCommitFiberRoot);
 
 describe('react-query-selector', () => {
   const container = document.body.appendChild(document.createElement('div'));
+  container.className = 'host';
+
   beforeEach(() => {
     hook.onCommitFiberRoot.mockClear();
 
@@ -117,6 +119,17 @@ describe('react-query-selector', () => {
       );
 
       expect(querySelectorAll('<Functional>')).toHaveLength(2);
+    });
+    it('should return when scoped above root', () => {
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent />
+        </span>,
+        container
+      );
+
+      expect(querySelectorAll('.host <Functional>')).toHaveLength(2);
     });
     it('should query props', () => {
       ReactDOM.render(

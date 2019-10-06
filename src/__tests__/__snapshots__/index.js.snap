@@ -2,47 +2,56 @@
 
 exports[`react-query-selector dumpTree should handle fragments 1`] = `
 Array [
-  "<Root>
-  <span>
-    <MyComponent>
-      <div>
-        <Functional>
-          <div/>
-          <div/>
-          <aside/>
-          <p/>
-          <span/>
+  "<html>
+  <body>
+    <div>
+      <Root>
+        <span>
+          <MyComponent>
+            <div>
+              <Functional>
+                <div/>
+                <div/>
+                <aside/>
+                <p/>
+                <span/>
 
-        </Functional>
-        <Text/>
+              </Functional>
+              <Text/>
 
-      </div>
+            </div>
 
-    </MyComponent>
-    <MyComponent>
-      <div>
-        <Functional>
-          <div/>
-          <div/>
-          <aside/>
-          <p/>
-          <span/>
+          </MyComponent>
+          <MyComponent>
+            <div>
+              <Functional>
+                <div/>
+                <div/>
+                <aside/>
+                <p/>
+                <span/>
 
-        </Functional>
-        <Text/>
+              </Functional>
+              <Text/>
 
-      </div>
+            </div>
 
-    </MyComponent>
-    <Fragment>
-      <div/>
-      <div/>
+          </MyComponent>
+          <Fragment>
+            <div/>
+            <div/>
 
-    </Fragment>
+          </Fragment>
 
-  </span>
+        </span>
 
-</Root>
+      </Root>
+
+    </div>
+
+  </body>
+
+</html>
 ",
 ]
 `;
@@ -63,92 +72,119 @@ exports[`react-query-selector generatePath should provide unique path from key 1
 
 exports[`react-query-selector querySelectorAll should support attributes on lazy + suspense elements 1`] = `
 Array [
-  "<Root>
-  <span>
-    <MySuspense>
-      <Suspense>
-        <Fragment>
-          <Lazy/>
+  "<html>
+  <body>
+    <div>
+      <Root>
+        <span>
+          <MySuspense>
+            <Suspense>
+              <Fragment>
+                <Lazy/>
 
-        </Fragment>
-        <Fragment>
-          <aside/>
+              </Fragment>
+              <Fragment>
+                <aside/>
 
-        </Fragment>
+              </Fragment>
 
-      </Suspense>
+            </Suspense>
 
-    </MySuspense>
-    <MySuspense>
-      <Suspense>
-        <Fragment>
-          <Lazy/>
+          </MySuspense>
+          <MySuspense>
+            <Suspense>
+              <Fragment>
+                <Lazy/>
 
-        </Fragment>
-        <Fragment>
-          <aside/>
+              </Fragment>
+              <Fragment>
+                <aside/>
 
-        </Fragment>
+              </Fragment>
 
-      </Suspense>
+            </Suspense>
 
-    </MySuspense>
+          </MySuspense>
 
-  </span>
+        </span>
 
-</Root>
+      </Root>
+
+    </div>
+
+  </body>
+
+</html>
 ",
 ]
 `;
 
 exports[`react-query-selector querySelectorAll should support attributes on lazy + suspense elements 2`] = `
 Array [
-  "<Root>
-  <span>
-    <MySuspense>
-      <Suspense>
-        <default>
-          <nav/>
+  "<html>
+  <body>
+    <div>
+      <Root>
+        <span>
+          <MySuspense>
+            <Suspense>
+              <default>
+                <nav/>
 
-        </default>
+              </default>
 
-      </Suspense>
+            </Suspense>
 
-    </MySuspense>
-    <MySuspense>
-      <Suspense>
-        <default>
-          <nav/>
+          </MySuspense>
+          <MySuspense>
+            <Suspense>
+              <default>
+                <nav/>
 
-        </default>
+              </default>
 
-      </Suspense>
+            </Suspense>
 
-    </MySuspense>
+          </MySuspense>
 
-  </span>
+        </span>
 
-</Root>
+      </Root>
+
+    </div>
+
+  </body>
+
+</html>
 ",
 ]
 `;
 
 exports[`react-query-selector querySelectorAll should support attributes on memo elements 1`] = `
 Array [
-  "<Root>
-  <span>
-    <MyFunction>
-      <Text/>
+  "<html>
+  <body>
+    <div>
+      <Root>
+        <span>
+          <MyFunction>
+            <Text/>
 
-    </MyFunction>
-    <MyFunction>
-      <Text/>
+          </MyFunction>
+          <MyFunction>
+            <Text/>
 
-    </MyFunction>
+          </MyFunction>
 
-  </span>
+        </span>
 
-</Root>
+      </Root>
+
+    </div>
+
+  </body>
+
+</html>
 ",
 ]
 `;
