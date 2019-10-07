@@ -121,17 +121,23 @@ function generateTreeNode(scope, fiber, parent, roots) {
     parent.children.push(ret);
   }
   generateTreeNode(undefined, fiber.child, ret, roots);
-  generateTreeNode(undefined, fiber.sibling, parent, roots);
 
-  // Check if this is a host of another react rendering context
   if (fiber.tag === ReactTypeOfWork.HostComponent && roots.length) {
-    const childRoot = roots.find(
-      child => child.containerInfo === fiber.stateNode
+    // Check if this is a host of another react rendering context or
+    // if we contain the rendering context and non of our children
+    // claimed it
+    const rootsToClaim = roots.filter(
+      child =>
+        child.containerInfo === fiber.stateNode ||
+        fiber.stateNode.contains(child.containerInfo)
     );
-    if (childRoot) {
+    rootsToClaim.forEach(childRoot => {
+      roots.splice(roots.indexOf(childRoot), 1);
       generateTreeNode(undefined, childRoot.current, ret, roots);
-    }
+    });
   }
+
+  generateTreeNode(undefined, fiber.sibling, parent, roots);
 
   return ret;
 }

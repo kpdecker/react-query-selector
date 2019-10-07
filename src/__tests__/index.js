@@ -412,10 +412,35 @@ describe('react-query-selector', () => {
         </div>,
         container
       );
-      ReactDOM.render(<App />, componentDOMNodes(querySelector('<Thing1>'))[0]);
+      const injectContainer = componentDOMNodes(querySelector('<Thing1>'))[0];
+      ReactDOM.render(<App />, injectContainer);
 
       expect(querySelectorAll('p')).toHaveLength(1);
       expect(querySelectorAll('<Thing1> p')).toHaveLength(1);
+
+      ReactDOM.unmountComponentAtNode(injectContainer);
+    });
+    it('should handle deeply nested roots', () => {
+      function Thing1() {
+        return <div></div>;
+      }
+
+      ReactDOM.render(
+        <div>
+          <Thing1 />
+        </div>,
+        container
+      );
+      const injectContainer = componentDOMNodes(querySelector('<Thing1>'))[0];
+      const injectChild = document.createElement('div');
+      injectContainer.appendChild(injectChild);
+
+      ReactDOM.render(<App />, injectChild);
+
+      expect(querySelectorAll('p')).toHaveLength(1);
+      expect(querySelectorAll('<Thing1> p')).toHaveLength(1);
+
+      ReactDOM.unmountComponentAtNode(injectChild);
     });
   });
 });
