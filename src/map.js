@@ -15,7 +15,7 @@ export function componentDOMNodes(component) {
     return [];
   }
   if (component.cloneNode && component.nodeType) {
-    // This is a DOM not (probably...)
+    // This is a DOM now (probably...)
     return [component];
   }
 
@@ -39,7 +39,17 @@ export function componentDOMNodes(component) {
 }
 
 export function generateQueryTree(scope) {
-  return fiberRoots()
+  const roots = fiberRoots();
+
+  // Find roots that are not a child of another
+  const topRoots = roots.filter(testing => {
+    let current = testing.current.stateNode.containerInfo;
+    return !roots.find(
+      needle => needle !== testing && needle.containerInfo.contains(current)
+    );
+  });
+
+  return topRoots
     .map(root => {
       if (scope) {
         let scopeDom = componentDOMNodes(scope);
@@ -54,8 +64,16 @@ export function generateQueryTree(scope) {
         }
       }
 
-      let treeNode = generateTreeNode(scope, root.current);
       let current = root.current.stateNode.containerInfo;
+      const childRoots = roots.filter(needle => {
+        return needle !== root && current.contains(needle.containerInfo);
+      });
+      let treeNode = generateTreeNode(
+        scope,
+        root.current,
+        undefined,
+        childRoots
+      );
 
       // Record host components for all parents of the react
       // root, filtering document from the iteration
@@ -76,7 +94,7 @@ export function generateQueryTree(scope) {
     .filter(Boolean);
 }
 
-function generateTreeNode(scope, fiber, parent) {
+function generateTreeNode(scope, fiber, parent, roots) {
   if (!fiber) {
     return;
   }
@@ -88,7 +106,7 @@ function generateTreeNode(scope, fiber, parent) {
     ) {
       let child = fiber.child;
       while (child) {
-        let ret = generateTreeNode(scope, child, parent);
+        let ret = generateTreeNode(scope, child, parent, roots);
         if (ret) {
           return ret;
         }
@@ -97,12 +115,23 @@ function generateTreeNode(scope, fiber, parent) {
       return undefined;
     }
   }
+
   let ret = new SelectNode(fiber, parent);
   if (parent) {
     parent.children.push(ret);
   }
-  generateTreeNode(undefined, fiber.child, ret);
-  generateTreeNode(undefined, fiber.sibling, parent);
+  generateTreeNode(undefined, fiber.child, ret, roots);
+  generateTreeNode(undefined, fiber.sibling, parent, roots);
+
+  // Check if this is a host of another react rendering context
+  if (fiber.tag === ReactTypeOfWork.HostComponent && roots.length) {
+    const childRoot = roots.find(
+      child => child.containerInfo === fiber.stateNode
+    );
+    if (childRoot) {
+      generateTreeNode(undefined, childRoot.current, ret, roots);
+    }
+  }
 
   return ret;
 }

@@ -381,4 +381,41 @@ describe('react-query-selector', () => {
       expect(dumpTree()).toMatchSnapshot();
     });
   });
+
+  describe('multiple roots', () => {
+    it('should handle sibling roots', () => {
+      const thing1 = document.createElement('div');
+      thing1.className = 'thing1';
+      const thing2 = document.createElement('div');
+      thing2.className = 'thing2';
+      container.appendChild(thing1);
+      container.appendChild(thing2);
+
+      ReactDOM.render(<App />, thing1);
+      ReactDOM.render(<App />, thing2);
+
+      expect(querySelectorAll('p')).toHaveLength(2);
+      expect(querySelectorAll('.thing1 p')).toHaveLength(1);
+      expect(querySelectorAll('.thing2 p')).toHaveLength(1);
+
+      ReactDOM.unmountComponentAtNode(thing1);
+      ReactDOM.unmountComponentAtNode(thing2);
+    });
+    it('should handle nested roots', () => {
+      function Thing1() {
+        return <div></div>;
+      }
+
+      ReactDOM.render(
+        <div>
+          <Thing1 />
+        </div>,
+        container
+      );
+      ReactDOM.render(<App />, componentDOMNodes(querySelector('<Thing1>'))[0]);
+
+      expect(querySelectorAll('p')).toHaveLength(1);
+      expect(querySelectorAll('<Thing1> p')).toHaveLength(1);
+    });
+  });
 });
