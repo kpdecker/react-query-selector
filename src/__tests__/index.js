@@ -27,8 +27,10 @@ describe('react-query-selector', () => {
   beforeEach(() => {
     hook.onCommitFiberRoot.mockClear();
 
-    ReactDOM.unmountComponentAtNode(container);
-    container.innerHTML = '';
+    if (container.innerHTML) {
+      ReactDOM.unmountComponentAtNode(container);
+      container.innerHTML = '';
+    }
   });
 
   // Must come after global above to ensure init state.
@@ -401,8 +403,11 @@ describe('react-query-selector', () => {
       thing1.className = 'thing1';
       const thing2 = document.createElement('div');
       thing2.className = 'thing2';
-      container.appendChild(thing1);
-      container.appendChild(thing2);
+
+      const injectContainer = document.createElement('div');
+      injectContainer.appendChild(thing1);
+      injectContainer.appendChild(thing2);
+      document.body.append(injectContainer);
 
       ReactDOM.render(<App />, thing1);
       ReactDOM.render(<App />, thing2);
