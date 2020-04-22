@@ -251,6 +251,22 @@ describe('react-query-selector', () => {
         done();
       }, 100);
     });
+    it('should support forwardRef', () => {
+      const MyFunction = () => <aside />;
+      const ForwardRef = forwardRef(MyFunction);
+      ReactDOM.render(
+        <span>
+          <MyFunction />
+          <ForwardRef value={4}/>
+        </span>,
+        container
+      );
+
+      expect(dumpTree()).toMatchSnapshot();
+      expect(querySelectorAll('aside')).toHaveLength(2);
+      expect(querySelectorAll('<MyFunction>[value]')).toHaveLength(1);
+      expect(querySelectorAll('<MyFunction>[value=4]')).toHaveLength(1);
+    });
   });
 
   describe('scoping', () => {

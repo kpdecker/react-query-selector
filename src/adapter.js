@@ -21,11 +21,8 @@ export function getTypeName(node) {
     return '';
   }
 
-  if (node.tag === ReactTypeOfWork.ForwardRef) {
-    return '<ForwardRef>';
-  }
-
-  let typeName = node.type ? node.type.type || node.type : '';
+  // node.tag === ForwardRef: node.type.render is the wrapped component
+  let typeName = node.type ? node.type.type || node.type.render || node.type : '';
   if (typeName.displayName) {
     return `<${typeName.displayName.replace(/[()]/g, '_')}>`;
   } else if (typeof typeName === 'function') {
@@ -50,11 +47,9 @@ export function getDisplayName(node) {
   if (node.tag === ReactTypeOfWork.LazyComponent) {
     return 'Lazy';
   }
-  if (node.tag === ReactTypeOfWork.ForwardRef) {
-    return 'ForwardRef';
-  }
 
-  let typeName = node.type ? node.type.type || node.type : '';
+  // node.tag === ForwardRef: node.type.render is the wrapped component\
+  let typeName = node.type ? node.type.type || node.type.render || node.type : '';
   if (typeName.displayName) {
     return typeName.displayName;
   } else if (typeof typeName === 'function') {
@@ -119,15 +114,15 @@ export default {
       node.tag === ReactTypeOfWork.HostComponent ||
       // || node.tag === ReactTypeOfWork.HostText
       node.tag === ReactTypeOfWork.Fragment ||
-      node.tag === ReactTypeOfWork.DehydratedFragment
+      node.tag === ReactTypeOfWork.DehydratedFragment ||
+      // || node.tag === ReactTypeOfWork.Mode
+      // || node.tag === ReactTypeOfWork.ContextProvider
+      // || node.tag === ReactTypeOfWork.ContextConsumer
+      node.tag === ReactTypeOfWork.ForwardRef ||
+      node.tag === ReactTypeOfWork.ForwardRefLazy
+      // || node.tag === ReactTypeOfWork.Profiler
+      // || node.tag === ReactTypeOfWork.PlaceholderComponent
     );
-    // || node.tag === ReactTypeOfWork.Mode
-    // || node.tag === ReactTypeOfWork.ContextConsumer
-    // || node.tag === ReactTypeOfWork.ContextProvider
-    // || node.tag === ReactTypeOfWork.ForwardRef
-    // || node.tag === ReactTypeOfWork.ForwardRefLazy
-    // || node.tag === ReactTypeOfWork.Profiler
-    // || node.tag === ReactTypeOfWork.PlaceholderComponent
   },
   getName(elem) {
     return elem.typeName;

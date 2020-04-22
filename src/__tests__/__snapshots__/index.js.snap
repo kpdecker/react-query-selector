@@ -37,10 +37,10 @@ Array [
             </div>
 
           </MyComponent>
-          <ForwardRef>
+          <Anonymous>
             <div/>
 
-          </ForwardRef>
+          </Anonymous>
 
         </span>
 
@@ -228,6 +228,35 @@ Array [
           </MyFunction>
           <MyFunction>
             <Text/>
+
+          </MyFunction>
+
+        </span>
+
+      </Root>
+
+    </div>
+
+  </body>
+
+</html>
+",
+]
+`;
+
+exports[`react-query-selector querySelectorAll should support forwardRef 1`] = `
+Array [
+  "<html>
+  <body>
+    <div>
+      <Root>
+        <span>
+          <MyFunction>
+            <aside/>
+
+          </MyFunction>
+          <MyFunction>
+            <aside/>
 
           </MyFunction>
 
