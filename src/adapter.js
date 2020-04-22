@@ -16,6 +16,15 @@ export function getTypeName(node) {
     return '<Lazy>';
   }
 
+  if (node.tag === ReactTypeOfWork.HostRoot) {
+    // Implicit and we're not targeting directly
+    return '';
+  }
+
+  if (node.tag === ReactTypeOfWork.ForwardRef) {
+    return '<ForwardRef>';
+  }
+
   let typeName = node.type ? node.type.type || node.type : '';
   if (typeName.displayName) {
     return `<${typeName.displayName.replace(/[()]/g, '_')}>`;
@@ -40,6 +49,9 @@ export function getDisplayName(node) {
   }
   if (node.tag === ReactTypeOfWork.LazyComponent) {
     return 'Lazy';
+  }
+  if (node.tag === ReactTypeOfWork.ForwardRef) {
+    return 'ForwardRef';
   }
 
   let typeName = node.type ? node.type.type || node.type : '';

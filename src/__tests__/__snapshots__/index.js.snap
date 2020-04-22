@@ -1,5 +1,60 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`react-query-selector dumpTree should handle foreardRef 1`] = `
+Array [
+  "<html>
+  <body>
+    <div>
+      <Root>
+        <span>
+          <MyComponent>
+            <div>
+              <Functional>
+                <div/>
+                <div/>
+                <aside/>
+                <p/>
+                <span/>
+
+              </Functional>
+              <Text/>
+
+            </div>
+
+          </MyComponent>
+          <MyComponent>
+            <div>
+              <Functional>
+                <div/>
+                <div/>
+                <aside/>
+                <p/>
+                <span/>
+
+              </Functional>
+              <Text/>
+
+            </div>
+
+          </MyComponent>
+          <ForwardRef>
+            <div/>
+
+          </ForwardRef>
+
+        </span>
+
+      </Root>
+
+    </div>
+
+  </body>
+
+</html>
+",
+]
+`;
+
 exports[`react-query-selector dumpTree should handle fragments 1`] = `
 Array [
   "<html>

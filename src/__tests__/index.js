@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, lazy } from 'react';
+import React, { Fragment, Suspense, lazy, forwardRef } from 'react';
 import ReactQuerSelector, {
   querySelector,
   querySelectorAll,
@@ -214,7 +214,7 @@ describe('react-query-selector', () => {
       expect(querySelectorAll('<MyFunction>[value=4]')).toHaveLength(1);
     });
 
-    it('should support attributes on lazy + suspense elements', done => {
+    it('should support attributes on lazy + suspense elements', (done) => {
       const OtherComponent = lazy(() =>
         Promise.resolve({ default: () => <nav>here</nav> })
       );
@@ -374,6 +374,19 @@ describe('react-query-selector', () => {
             <div />
             <div />
           </Fragment>
+        </span>,
+        container
+      );
+
+      expect(dumpTree()).toMatchSnapshot();
+    });
+    it('should handle foreardRef', () => {
+      const Forward = forwardRef(() => <div />)
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <MyComponent />
+          <Forward />
         </span>,
         container
       );
