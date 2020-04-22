@@ -1,6 +1,6 @@
 {
   "name": "react-query-selector",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "main": "dist/react-query-selector.cjs.js",
   "module": "dist/react-query-selector.esm.js",
   "browser": "dist/react-query-selector.umd.js",
