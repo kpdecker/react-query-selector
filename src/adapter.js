@@ -1,4 +1,4 @@
-import DomUtils from 'domutils';
+import { removeSubsets } from 'domutils/lib/helpers';
 import { ReactTypeOfWork } from './global-hook';
 
 export function getTypeName(node) {
@@ -196,7 +196,7 @@ export default {
     throw new Error('Not Impl');
   },
 
-  removeSubsets: DomUtils.removeSubsets,
+  removeSubsets,
   existsOne(test, elems) {
     return !!this.findOne(elems);
   },
