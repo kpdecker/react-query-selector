@@ -1,5 +1,59 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`react-query-selector dumpTree should handle ContextProvider 1`] = `
+Array [
+  "<html>
+  <body>
+    <div>
+      <Root>
+        <span>
+          <MyComponent>
+            <div>
+              <Functional>
+                <div/>
+                <div/>
+                <aside/>
+                <p/>
+                <span/>
+
+              </Functional>
+              <Text/>
+
+            </div>
+
+          </MyComponent>
+          <ContextProvider>
+            <MyComponent>
+              <div>
+                <Functional>
+                  <div/>
+                  <div/>
+                  <aside/>
+                  <p/>
+                  <span/>
+
+                </Functional>
+                <Text/>
+
+              </div>
+
+            </MyComponent>
+
+          </ContextProvider>
+
+        </span>
+
+      </Root>
+
+    </div>
+
+  </body>
+
+</html>
+",
+]
+`;
+
 exports[`react-query-selector dumpTree should handle foreardRef 1`] = `
 Array [
   "<html>
@@ -124,6 +178,38 @@ exports[`react-query-selector generatePath should provide unique path for multip
 exports[`react-query-selector generatePath should provide unique path for multiple elements 2`] = `"<MyComponent>:nth-of-type(1) <Functional> aside[key=\\"2\\"]"`;
 
 exports[`react-query-selector generatePath should provide unique path from key 1`] = `"<MyComponent>[key=\\"1\\"]"`;
+
+exports[`react-query-selector querySelectorAll should support ContextProvider 1`] = `
+Array [
+  "<html>
+  <body>
+    <div>
+      <Root>
+        <span>
+          <MyFunction>
+            <aside/>
+
+          </MyFunction>
+          <ContextProvider>
+            <MyFunction>
+              <aside/>
+
+            </MyFunction>
+
+          </ContextProvider>
+
+        </span>
+
+      </Root>
+
+    </div>
+
+  </body>
+
+</html>
+",
+]
+`;
 
 exports[`react-query-selector querySelectorAll should support attributes on lazy + suspense elements 1`] = `
 Array [

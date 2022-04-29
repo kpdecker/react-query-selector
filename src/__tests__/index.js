@@ -267,6 +267,23 @@ describe('react-query-selector', () => {
       expect(querySelectorAll('<MyFunction>[value]')).toHaveLength(1);
       expect(querySelectorAll('<MyFunction>[value=4]')).toHaveLength(1);
     });
+    it('should support ContextProvider', () => {
+      const MyFunction = () => <aside />;
+      const Context = React.createContext({test: "test"});
+      ReactDOM.render(
+        <span>
+          <MyFunction />
+          <Context.Provider>
+            <MyFunction />
+          </Context.Provider>
+        </span>,
+        container
+      );
+
+      expect(dumpTree()).toMatchSnapshot();
+      expect(querySelectorAll('aside')).toHaveLength(2);
+      
+    });
   });
 
   describe('scoping', () => {
@@ -405,6 +422,20 @@ describe('react-query-selector', () => {
           <MyComponent />
           <MyComponent />
           <Forward />
+        </span>,
+        container
+      );
+
+      expect(dumpTree()).toMatchSnapshot();
+    });
+    it('should handle ContextProvider', () => {
+      const Context = React.createContext({test: "test"});
+      ReactDOM.render(
+        <span>
+          <MyComponent />
+          <Context.Provider>
+            <MyComponent />
+          </Context.Provider>
         </span>,
         container
       );
