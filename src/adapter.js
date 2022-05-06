@@ -11,6 +11,9 @@ export function getTypeName(node) {
   if (node.tag === ReactTypeOfWork.SuspenseComponent) {
     return '<Suspense>';
   }
+  if (node.tag === ReactTypeOfWork.ContextProvider) {
+    return '<ContextProvider>';
+  }
   if (node.tag === ReactTypeOfWork.LazyComponent) {
     debugger;
     return '<Lazy>';
@@ -43,6 +46,9 @@ export function getDisplayName(node) {
   }
   if (node.tag === ReactTypeOfWork.SuspenseComponent) {
     return 'Suspense';
+  }
+  if (node.tag === ReactTypeOfWork.ContextProvider) {
+    return 'ContextProvider';
   }
   if (node.tag === ReactTypeOfWork.LazyComponent) {
     return 'Lazy';
@@ -116,7 +122,7 @@ export default {
       node.tag === ReactTypeOfWork.Fragment ||
       node.tag === ReactTypeOfWork.DehydratedFragment ||
       // || node.tag === ReactTypeOfWork.Mode
-      // || node.tag === ReactTypeOfWork.ContextProvider
+      node.tag === ReactTypeOfWork.ContextProvider || 
       // || node.tag === ReactTypeOfWork.ContextConsumer
       node.tag === ReactTypeOfWork.ForwardRef ||
       node.tag === ReactTypeOfWork.ForwardRefLazy
